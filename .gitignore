@@ -19,3 +19,5 @@ bin/*.txt
 
 *.exe
 *.exp
+
+*.txt

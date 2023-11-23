@@ -25,3 +25,5 @@ bin/*.txt
 *.pb
 *.index
 *.lib
+*.vocab
+*.json

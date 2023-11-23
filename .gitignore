@@ -21,3 +21,7 @@ bin/*.txt
 *.exp
 
 *.txt
+*.feat
+*.pb
+*.index
+*.lib

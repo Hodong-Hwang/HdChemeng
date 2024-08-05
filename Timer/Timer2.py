@@ -6,7 +6,7 @@ import os
 
 # NTP 서버 목록
 ntp_servers = ['pool.ntp.org', 'time.google.com', 'time.windows.com']
-target_url = "https://sports.cfmc.or.kr/rent/application/index/2024/08/06/1/CHEONAN01/19"
+target_url = "https://sports.cfmc.or.kr/rent/reservation/index/2024/08/12/1/CHEONAN01/19/6"
 
 # NTP를 통해 현재 시간 가져오기
 def get_ntp_time():
@@ -60,4 +60,4 @@ def open_url_at_target_time(target_hour, target_minute, target_second, target_mi
         time.sleep(0.01)
 
 # 21시 00분 00초 000밀리초(한국 표준시)에 URL 열기 시작
-open_url_at_target_time(16, 00, 59, 750)
+open_url_at_target_time(16, 3, 59, 800)

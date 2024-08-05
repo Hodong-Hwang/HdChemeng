@@ -57,7 +57,7 @@ def open_url_at_target_time(target_hour, target_minute, target_second, target_mi
             print(f"Error retrieving NTP time: {e}")
 
         # 10밀리초마다 시간 확인
-        time.sleep(0.01)
+        time.sleep(0.1)
 
 # 21시 00분 00초 000밀리초(한국 표준시)에 URL 열기 시작
-open_url_at_target_time(16, 3, 59, 800)
+open_url_at_target_time(20, 59, 59, 800)

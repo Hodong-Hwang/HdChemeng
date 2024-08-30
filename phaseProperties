@@ -1,0 +1,201 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      phaseProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+/*
+ * phaseProperties
+ *
+ * This file defines properties for each phase in a multiphase flow simulation.
+ */
+
+ type            basicMultiphaseSystem;
+
+ phases          (air solid);
+ 
+ // Define properties for the air phase
+ air
+ {
+     type            purePhaseModel; // Defines the phase model
+     diameterModel   isothermal; // Defines the diameter model for the air phase
+     isothermalCoeffs
+     {
+         d0              3e-3; // Characteristic diameter (m)
+         p0              1e5; // Reference pressure (Pa)
+     }
+ 
+     residualAlpha   1e-6; // Residual alpha for convergence
+ }
+ 
+ // Define properties for the solid phase
+ solid
+ {
+     type            purePhaseModel; // Defines the phase model
+     diameterModel   constant; // Defines the diameter model for the solid phase
+     constantCoeffs
+     {
+         d               1e-4; // Diameter (m)
+     }
+ 
+     residualAlpha   1e-6; // Residual alpha for convergence
+ }
+ 
+ // Blending settings for phase properties
+ blending
+ {
+     default
+     {
+         type            linear; // Blending type
+         minFullyContinuousAlpha.air 0.7; // Minimum alpha for fully continuous air phase
+         minPartlyContinuousAlpha.air 0.3; // Minimum alpha for partly continuous air phase
+         minFullyContinuousAlpha.solid 0.7; // Minimum alpha for fully continuous solid phase
+         minPartlyContinuousAlpha.solid 0.3; // Minimum alpha for partly continuous solid phase
+     }
+     drag
+     {
+         type            linear; // Blending type
+         minFullyContinuousAlpha.air 0.7; // Minimum alpha for fully continuous air phase in drag model
+         minPartlyContinuousAlpha.air 0.5; // Minimum alpha for partly continuous air phase in drag model
+         minFullyContinuousAlpha.solid 0.7; // Minimum alpha for fully continuous solid phase in drag model
+         minPartlyContinuousAlpha.solid 0.5; // Minimum alpha for partly continuous solid phase in drag model
+     }
+ }
+ 
+ // Surface tension properties between air and solid
+ surfaceTension
+ (
+     (air and solid)
+     {
+         type            constant; // Surface tension type
+         sigma           0.07; // Surface tension coefficient (N/m)
+     }
+ );
+ 
+ // Interface compression settings
+ interfaceCompression
+ ();
+ 
+ // Aspect ratio for air in solid and solid in air
+ aspectRatio
+ (
+     (air in solid)
+     {
+         type            constant; // Aspect ratio type
+         E0              1.0; // Aspect ratio constant for air in solid
+     }
+ 
+     (solid in air)
+     {
+         type            constant; // Aspect ratio type
+         E0              1.0; // Aspect ratio constant for solid in air
+     }
+ );
+ 
+ // Drag model settings
+ drag
+ (
+     (air in solid)
+     {
+         type            SchillerNaumann; // Drag model type
+         residualRe      1e-3; // Residual Reynolds number
+         swarmCorrection
+         {
+             type        none; // Swarm correction type
+         }
+     }
+ 
+     (solid in air)
+     {
+         type            SchillerNaumann; // Drag model type
+         residualRe      1e-3; // Residual Reynolds number
+         swarmCorrection
+         {
+             type        none; // Swarm correction type
+         }
+     }
+ 
+     (air and solid)
+     {
+         type            segregated; // Drag model type
+         m               0.5; // Parameter m for segregated drag model
+         n               8; // Parameter n for segregated drag model
+         swarmCorrection
+         {
+             type        none; // Swarm correction type
+         }
+     }
+ );
+ 
+ // Virtual mass coefficient settings
+ virtualMass
+ (
+     (air in solid)
+     {
+         type            constantCoefficient; // Virtual mass model type
+         Cvm             0.5; // Coefficient for virtual mass
+     }
+ 
+     (solid in air)
+     {
+         type            constantCoefficient; // Virtual mass model type
+         Cvm             0.5; // Coefficient for virtual mass
+     }
+ );
+ 
+ // Heat transfer settings
+ heatTransfer
+ (
+     (air in solid)
+     {
+         type            RanzMarshall; // Heat transfer model type
+         residualAlpha   1e-4; // Residual alpha for convergence
+     }
+ 
+     (solid in air)
+     {
+         type            RanzMarshall; // Heat transfer model type
+         residualAlpha   1e-4; // Residual alpha for convergence
+     }
+ );
+ 
+ // Phase transfer settings
+ phaseTransfer
+ ();
+ 
+ // Lift force settings
+ lift
+ ();
+ 
+ // Wall lubrication settings
+ wallLubrication
+ ();
+ 
+ // Turbulent dispersion settings
+ turbulentDispersion
+ ();
+ 
+ // Minimum allowable pressure
+ pMin            10000; // Minimum pressure (Pa)
+
+
+
+
+
+
+
+
+
+
+
+
+// ************************************************************************* //

@@ -1,0 +1,48 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Time management
+application     interFoam;     // Solver to use, e.g., interFoam for multiphase flows
+
+startTime       0;             // Start time of the simulation
+endTime         10;            // End time of the simulation
+deltaT          0.01;          // Time step size
+
+writeControl    timeStep;      // Controls when data is written
+writeInterval   100;           // Write interval in number of time steps
+
+// Field output
+writeFormat     ascii;         // Output format (ascii or binary)
+writePrecision  6;             // Precision for ascii output
+writeCompression off;          // Compression for output files
+
+// Function objects
+functions
+{
+    // Example function object for calculating and outputting the mean velocity
+    meanVelocity
+    {
+        type            fieldAverage;  // Type of function object
+        outputControl   timeStep;       // Output control (e.g., timeStep, writeInterval)
+        outputInterval  100;            // Output interval
+        fields          (U);            // Field to be averaged
+    }
+}
+
+// Other settings
+purgeWrite      0;             // Number of time steps to keep before purging old data
+timeFormat      general;       // Format of time in output files
+runTimeModifiable true;        // Allows modification of runtime parameters

@@ -1,0 +1,94 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+# Parameters
+Lx, Ly = 10.0, 10.0  # Domain size in x and y directions
+Nx, Ny = 20, 20      # Number of spatial points in x and y directions
+dx, dy = Lx / Nx, Ly / Ny  # Spatial step sizes
+dt = 0.01  # Time step
+T = 1.0     # Total time
+rho = 1.0   # Density
+
+# Define the stiffness tensor (for simplicity, assume 2D and isotropic)
+C = np.array([[1.0, 0.5], [0.5, 1.0]])
+
+# Initialize grids
+x = np.linspace(0, Lx, Nx)
+y = np.linspace(0, Ly, Ny)
+X, Y = np.meshgrid(x, y)
+
+# Initial displacement (U) and energy (E) matrices
+U = np.zeros((Nx, Ny, 2))  # Displacement vector U with 2 components
+
+# Apply initial velocity condition at the inlet (x = 0)
+U[:, 0, 0] = 1.0  # 1 m/s in x-direction at the inlet
+
+# Initial energy (E) and displacement (U) matrices
+E = np.zeros((Nx, Ny))
+E_new = np.zeros_like(E)
+
+# Create a figure and axes for plotting
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+def update(frame):
+    global U, E, E_new
+    
+    # Compute strain tensor E from displacement U
+    dU_dx = np.gradient(U[:, :, 0], dx, axis=0)
+    dU_dy = np.gradient(U[:, :, 1], dy, axis=1)
+    
+    E_xx = dU_dx
+    E_yy = dU_dy
+    E_xy = 0.5 * (np.gradient(U[:, :, 1], dx, axis=0) + np.gradient(U[:, :, 0], dy, axis=1))
+    
+    E_tensor = np.array([
+        [E_xx, E_xy],
+        [E_xy, E_yy]
+    ])
+    
+    # Compute stress tensor sigma using the stiffness tensor C
+    sigma_xx = C[0, 0] * E_xx + C[0, 1] * E_yy
+    sigma_yy = C[1, 0] * E_xx + C[1, 1] * E_yy
+    sigma_xy = C[0, 1] * E_xy + C[1, 0] * E_xy
+
+    sigma_tensor = np.array([
+        [sigma_xx, sigma_xy],
+        [sigma_xy, sigma_yy]
+    ])
+    
+    # Compute the inner product (sigma : E)
+    stress_strain_inner_product = np.sum(sigma_tensor * E_tensor)
+    
+    # Update energy (E)
+    E_new = E + (dt / rho) * stress_strain_inner_product
+    E = E_new
+    
+    # # Update displacement for the next frame (simple forward Euler integration)
+    # U[:, :, 0] += dt * np.gradient(E, dx, axis=0)[:, :, 0]
+    # U[:, :, 1] += dt * np.gradient(E, dy, axis=1)[:, :, 1]
+    
+    # Plot energy distribution
+    ax1.clear()
+    c1 = ax1.contourf(X, Y, E, cmap='viridis')
+    fig.colorbar(c1, ax=ax1, label='Energy (E)')
+    ax1.set_title(f'Energy Distribution at t = {frame*dt:.2f}')
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('y')
+    
+    # # Plot velocity field
+    # ax2.clear()
+    # Q = ax2.quiver(X, Y, U[:, :, 0], U[:, :, 1], scale=10, color='r')
+    # ax2.set_title(f'Velocity Field at t = {frame*dt:.2f}')
+    # ax2.set_xlabel('x')
+    # ax2.set_ylabel('y')
+
+    return ax1, ax2
+
+# Create the animation
+ani = animation.FuncAnimation(fig, update, frames=int(T / dt), interval=50, blit=False)
+
+# Save the animation
+#ani.save('fluid_dynamics_simulation.gif', writer='ffmpeg', fps=20)
+
+plt.show()

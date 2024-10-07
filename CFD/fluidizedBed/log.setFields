@@ -1,0 +1,41 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2312                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _1d8f0d55f7-20231221 OPENFOAM=2312 version=v2312
+Arch   : "LSB;label=32;scalar=64"
+Exec   : setFields
+Date   : Oct 07 2024
+Time   : 16:44:31
+Host   : DESKTOP-I0J1BS0
+PID    : 71137
+I/O    : uncollated
+Case   : /mnt/d/GitHub/Python/HdChemeng/CFD/OpenFoamTest/fluidizedBed
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Reading setFieldsDict
+
+Setting volume field default values
+    - set internal values of volScalarField: alpha.air = 1
+    - set internal values of volScalarField: alpha.particles = 0
+
+Setting field region values
+
+    Adding cells with centre within boxes 1((0 0 -0.1) (0.15 0.5 0.1))
+    Selected 3000/6000 cells
+    - set internal values of volScalarField: alpha.air = 0.45
+    - set internal values of volScalarField: alpha.particles = 0.55
+
+End
+

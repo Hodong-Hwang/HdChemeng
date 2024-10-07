@@ -29,6 +29,5 @@ bin/*.txt
 *.json
 /*.
 
-/"*."
-/[0].
-/GitIgnore
+"*."/
+GitIgnore/
